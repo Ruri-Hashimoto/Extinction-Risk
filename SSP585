@@ -1,0 +1,334 @@
+library('SciViews')
+library('raster')
+library('RColorBrewer')
+
+dir <- "//itsuboNAS/backup/species20000/BRIDGE/BRIDGE_tar/map"
+taxon <- c("Actinopterygii","Amphibia","Aves","Hymenoptera","Lepidoptera","Mammalia","Plantae","Reptilia")
+sp_list <- readr::read_csv("~/Results/2万種/species_list_2m.csv")
+
+sp_list  <- readxl::read_xlsx("~/Results/2万種/species_list.xlsx", sheet = 'Amphibia') 
+#NB       <- c(8744, 11195, 6701, 425321,12162)
+
+#種ごとに見る場合
+#sp_list <- sp_list[sp_list$Species_name == "Pseudacris_triseriata", ]
+
+sp_org <- sp_list$Species_name
+sp_taxon <- sp_list$Taxon
+tot <- length(sp_org)
+
+#Amphibia⇒Pseudophryne_occidentalisのみ計算スキップされたので後で、加える
+
+for(i in 1:length(sp_org)) { 
+  ##define#################################### 
+  print(i)　
+  sp_n <- sp_org[i] 
+  sp_taxa <- taxon[2]
+  sp_n_path <- paste0(dir,"/",sp_taxa,"/",sp_n,"/",sp_n)
+  CC_folder <- paste0(sp_n_path, "/CC")
+  cat("  ", i, sp_n, "\n")
+  #R <- 1/85
+  
+  #Baseline
+  eval(parse(text = paste("sp_1 <- raster('",sp_n_path,"/",sp_n,"_Current-v250801_FullRange.tif')",sep = "")))
+  ##SSP585 2090年代
+  eval(parse(text = paste("sp_ACCESS_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-ACCESS-CM2-ssp585-2090-CC-v250801_FullRange.tif')",sep="")))
+  eval(parse(text = paste("sp_IPSL_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-IPSL-CM6A-LR-ssp585-2090-CC-v250801_FullRange.tif')",sep = "")))
+  eval(parse(text = paste("sp_MIROC6_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MIROC6-ssp585-2090-CC-v250801_FullRange.tif')",sep = "")))
+  eval(parse(text = paste("sp_MPI_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-MPI-ESM1-2-HR-ssp585-2090-CC-v250801_FullRange.tif')",sep = "")))
+  eval(parse(text = paste("sp_MRI_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MRI-ESM2-0-ssp585-2090-CC-v250801_FullRange.tif')",sep = "")))
+  
+  #各年代の結果を得た場合は、20xx年代のデータのみを差し替えるだけでOK+Kの値を変える
+  ##SSP585 2070年代 K=65
+  #eval(parse(text = paste("sp_ACCESS_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-ACCESS-CM2-ssp585-2070-CC-v250801_FullRange.tif')",sep="")))
+  #eval(parse(text = paste("sp_IPSL_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-IPSL-CM6A-LR-ssp585-2070-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MIROC6_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MIROC6-ssp585-2070-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MPI_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-MPI-ESM1-2-HR-ssp585-2070-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MRI_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MRI-ESM2-0-ssp585-2070-CC-v250801_FullRange.tif')",sep = "")))
+  
+  ##SSP585 2050年代 K=45
+  #eval(parse(text = paste("sp_ACCESS_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-ACCESS-CM2-ssp585-2050-CC-v250801_FullRange.tif')",sep="")))
+  #eval(parse(text = paste("sp_IPSL_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-IPSL-CM6A-LR-ssp585-2050-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MIROC6_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MIROC6-ssp585-2050-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MPI_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-MPI-ESM1-2-HR-ssp585-2050-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MRI_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MRI-ESM2-0-ssp585-2050-CC-v250801_FullRange.tif')",sep = "")))
+  
+  ##SSP585 2030年代 K=25
+  #eval(parse(text = paste("sp_ACCESS_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-ACCESS-CM2-ssp585-2030-CC-v250801_FullRange.tif')",sep="")))
+  #eval(parse(text = paste("sp_IPSL_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-IPSL-CM6A-LR-ssp585-2030-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MIROC6_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MIROC6-ssp585-2030-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MPI_2100 <- raster('",CC_folder,"/",sp_n,"_ssp585-MPI-ESM1-2-HR-ssp585-2030-CC-v250801_FullRange.tif')",sep = "")))
+  #eval(parse(text = paste("sp_MRI_2100  <- raster('",CC_folder,"/",sp_n,"_ssp585-MRI-ESM2-0-ssp585-2030-CC-v250801_FullRange.tif')",sep = "")))
+  
+  #生息域のセル数カウント
+  sum_1 <- sum(values(sp_1), na.rm = T)
+  sum_ACCESS <- sum(values(sp_ACCESS_2100), na.rm = T)
+  sum_IPSL <- sum(values(sp_IPSL_2100), na.rm = T)
+  sum_MIROC6 <- sum(values(sp_MIROC6_2100), na.rm = T)
+  sum_MPI <- sum(values(sp_MPI_2100), na.rm = T)
+  sum_MRI <- sum(values(sp_MRI_2100), na.rm = T)
+  sum_mean <- (sum_ACCESS + sum_IPSL + sum_MIROC6 + sum_MPI + sum_MRI) / 5
+  
+  #生息域の変化
+  sp_ch_ACCESS <- sp_1 - sp_ACCESS_2100
+  sp_ch_IPSL <- sp_1 - sp_IPSL_2100
+  sp_ch_MIROC6 <- sp_1 - sp_MIROC6_2100
+  sp_ch_MPI <- sp_1 - sp_MPI_2100
+  sp_ch_MRI <- sp_1 - sp_MRI_2100
+  sp_ch_mean <- (sp_ch_ACCESS + sp_ch_IPSL + sp_ch_MIROC6 + sp_ch_MPI + sp_ch_MRI) / 5
+  
+  #生息域変化のセル数カウント
+  sp_sum_ACCESS <- sum(values(sp_ch_ACCESS),na.rm = T) 
+  sp_sum_IPSL <- sum(values(sp_ch_IPSL),na.rm = T) 
+  sp_sum_MIROC6 <- sum(values(sp_ch_MIROC6),na.rm = T)
+  sp_sum_MPI <- sum(values(sp_ch_MPI),na.rm = T) 
+  sp_sum_MRI <- sum(values(sp_ch_MRI),na.rm = T)
+  sp_sum_mean <- (sp_sum_ACCESS + sp_sum_IPSL + sp_sum_MIROC6 + sp_sum_MPI + sp_sum_MRI) / 5
+  
+  #############################
+  #########---ER---############
+  #############################
+  K <- 1/85
+  #ACCESS
+  T_CC_ACCESS <- (85*(ln(1/sum(values(sp_1),na.rm = T))/ln(sum(values(sp_ACCESS_2100),na.rm = T)/sum(values(sp_1),na.rm = T))))
+  Y_CC_ACCESS <- 1 / T_CC_ACCESS
+  if_ycc_ACCESS <- ifelse(is.infinite(Y_CC_ACCESS),K,Y_CC_ACCESS)
+  if_ycc_ACCESS[if_ycc_ACCESS==0] <- 0
+  
+  #IPSL
+  T_CC_IPSL <- (85*(ln(1/sum(values(sp_1),na.rm = T))/ln(sum(values(sp_IPSL_2100),na.rm = T)/sum(values(sp_1),na.rm = T))))
+  Y_CC_IPSL <- 1 / T_CC_IPSL
+  if_ycc_IPSL <- ifelse(is.infinite(Y_CC_IPSL),K,Y_CC_IPSL)
+  if_ycc_IPSL[if_ycc_IPSL==0] <- 0
+  
+  #MIROC6
+  T_CC_MIROC6 <- (85*(ln(1/sum(values(sp_1),na.rm = T))/ln(sum(values(sp_MIROC6_2100),na.rm = T)/sum(values(sp_1),na.rm = T))))
+  Y_CC_MIROC6 <- 1 / T_CC_MIROC6
+  if_ycc_MIROC6 <- ifelse(is.infinite(Y_CC_MIROC6),K,Y_CC_MIROC6)
+  if_ycc_MIROC6[if_ycc_MIROC6==0] <- 0
+  
+  #MPI
+  T_CC_MPI <- (85*(ln(1/sum(values(sp_1),na.rm = T))/ln(sum(values(sp_MPI_2100),na.rm = T)/sum(values(sp_1),na.rm = T))))
+  Y_CC_MPI <- 1 / T_CC_MPI
+  if_ycc_MPI <- ifelse(is.infinite(Y_CC_MPI),K,Y_CC_MPI)
+  if_ycc_MPI[if_ycc_MPI==0] <- 0
+  
+  #MRI
+  T_CC_MRI <- (85*(ln(1/sum(values(sp_1),na.rm = T))/ln(sum(values(sp_MRI_2100),na.rm = T)/sum(values(sp_1),na.rm = T))))
+  Y_CC_MRI <- 1 / T_CC_MRI
+  if_ycc_MRI <- ifelse(is.infinite(Y_CC_MRI),K,Y_CC_MRI)
+  if_ycc_MRI[if_ycc_MRI==0] <- 0
+  
+  #MEAN
+  if_ycc_mean <- (if_ycc_ACCESS + if_ycc_IPSL + if_ycc_MIROC6 + if_ycc_MPI + if_ycc_MRI) / 5
+  
+  #############################
+  #########---ALLOCATE---######
+  #############################
+  #ACCESS
+  if(sp_sum_ACCESS ==0){
+    sp1_sum <- sum(values(sp_1),na.rm = T)
+    sp_anbun_ACCESS <- if_ycc_ACCESS / sp1_sum
+    sp_risk_ACCESS_90 <-  sp_anbun_ACCESS * sp_1
+  } else{
+    sp_anbun_ACCESS <- if_ycc_ACCESS / sp_sum_ACCESS
+    sp_risk_ACCESS_90 <- sp_ch_ACCESS * sp_anbun_ACCESS
+  }
+  if(i== 1){
+    sp_eines_ACCESS_90 <- sp_risk_ACCESS_90
+  } else{
+    sp_eines_ACCESS_90 <- sp_eines_ACCESS_90 + sp_risk_ACCESS_90
+  }
+  
+  #IPSL
+  if(sp_sum_IPSL ==0){
+    sp1_sum <- sum(values(sp_1),na.rm = T)
+    sp_anbun_IPSL <- if_ycc_IPSL / sp1_sum
+    sp_risk_IPSL_90 <-  sp_anbun_IPSL * sp_1
+  } else{
+    sp_anbun_IPSL <- if_ycc_IPSL / sp_sum_IPSL
+    sp_risk_IPSL_90 <- sp_ch_IPSL * sp_anbun_IPSL
+  }
+  if(i== 1){
+    sp_eines_IPSL_90 <- sp_risk_IPSL_90
+  } else{
+    sp_eines_IPSL_90 <- sp_eines_IPSL_90 + sp_risk_IPSL_90
+  }
+  
+  #MIROC6
+  if(sp_sum_MIROC6 ==0){
+    sp1_sum <- sum(values(sp_1),na.rm = T)
+    sp_anbun_MIROC6 <- if_ycc_MIROC6 / sp1_sum
+    sp_risk_MIROC6_90 <-  sp_anbun_MIROC6 * sp_1
+  } else{
+    sp_anbun_MIROC6 <- if_ycc_MIROC6 / sp_sum_MIROC6
+    sp_risk_MIROC6_90 <- sp_ch_MIROC6 * sp_anbun_MIROC6
+  }
+  if(i== 1){
+    sp_eines_MIROC6_90 <- sp_risk_MIROC6_90
+  } else{
+    sp_eines_MIROC6_90 <- sp_eines_MIROC6_90 + sp_risk_MIROC6_90
+  }
+  
+  #MPI
+  if(sp_sum_MPI ==0){
+    sp1_sum <- sum(values(sp_1),na.rm = T)
+    sp_anbun_MPI <- if_ycc_MPI / sp1_sum
+    sp_risk_MPI_90 <-  sp_anbun_MPI * sp_1
+  } else{
+    sp_anbun_MPI <- if_ycc_MPI / sp_sum_MPI
+    sp_risk_MPI_90 <- sp_ch_MPI * sp_anbun_MPI
+  }
+  if(i== 1){
+    sp_eines_MPI_90 <- sp_risk_MPI_90
+  } else{
+    sp_eines_MPI_90 <- sp_eines_MPI_90 + sp_risk_MPI_90
+  }
+  
+  #MRI
+  if(sp_sum_MRI ==0){
+    sp1_sum <- sum(values(sp_1),na.rm = T)
+    sp_anbun_MRI <- if_ycc_MRI / sp1_sum
+    sp_risk_MRI_90 <-  sp_anbun_MRI * sp_1
+  } else{
+    sp_anbun_MRI <- if_ycc_MRI / sp_sum_MRI
+    sp_risk_MRI_90 <- sp_ch_MRI * sp_anbun_MRI
+  }
+  if(i== 1){
+    sp_eines_MRI_90 <- sp_risk_MRI_90
+  } else{
+    sp_eines_MRI_90 <- sp_eines_MRI_90 + sp_risk_MRI_90
+  }
+  
+  #MEAN(5 GCMs)
+  if(sp_sum_mean ==0){
+    sp1_sum <- sum(values(sp_1),na.rm = T)
+    sp_anbun_mean <- if_ycc_mean / sp1_sum
+    sp_risk_mean_90 <-  sp_anbun_mean * sp_1
+  } else{
+    sp_anbun_mean <- if_ycc_mean /sp_sum_mean
+    sp_risk_mean_90 <- sp_ch_mean * sp_anbun_mean
+  }
+  if(i== 1){
+    sp_eines_mean_90 <- sp_risk_mean_90
+  } else{
+    sp_eines_mean_90 <- sp_eines_mean_90 + sp_risk_mean_90
+  }
+  
+  #############################
+  ###---E/MSY calculation---###
+  #############################
+  #conv       <- NB[1]/ tot
+  #expans     <- sp_eines_mean_90 * conv #expansion→Weight Factorを考慮した後
+  #EMSY       <- expans / NB[1] * 1000000 #E/MSY_taxonレベル
+  EMSY_ACCESS <- sp_eines_ACCESS_90 * 1000000 / tot
+  EMSY_IPSL <- sp_eines_IPSL_90 * 1000000 / tot
+  EMSY_MIROC6 <- sp_eines_MIROC6_90 * 1000000 / tot
+  EMSY_MPI <- sp_eines_MPI_90 * 1000000 / tot
+  EMSY_MRI <- sp_eines_MRI_90 * 1000000 / tot
+  EMSY_mean <- sp_eines_mean_90 * 1000000 / tot
+  
+  #############################
+  #####---DF calculation---####
+  #############################
+  #!!!!SSP585に関する係数がないため、一旦DFの計算はスキップ!!!!
+  
+  #ppb <- 6.21E-09 #濃度増分①[ppb.year/kg-CO2]
+  #Wm_ppb <- 1.4E-05 #濃度と放射強制力の関係② [Wm^-2.ppb^-2]
+  #Wm_26 <- 243.52 #85年間の放射強制力累積値_RCP2.6 [Wm^-2]
+  #Wm_70 <- 372.995 #85年間の放射強制力累積値_RCP7.0③[Wm^-2]
+  #DF = ①*②÷③*グリッド別の絶滅リスク[-/year]
+  #DF <- (ppb * Wm_ppb / Wm_26)*sp_eines_mean_90
+  #DF_re <- DF*10^6*10^6/tot #[E/MSY/ktonCO2]
+  #DF <- expans * 3.9E-11 * 10000 / 2.83 #3.9E-11 [℃.year/ton-CO2], 2.83 (srcp7.0) [℃]　
+  
+  ###---ER LIST---##########################
+  if(i == 1){ 
+    sp_risk <- c(sp_taxa,sp_n,sum_1,
+                 sum_ACCESS,sum_IPSL,sum_MIROC6,sum_MPI,sum_MRI,sum_mean,
+                 if_ycc_ACCESS,if_ycc_IPSL,if_ycc_MIROC6,if_ycc_MPI,if_ycc_MRI,if_ycc_mean)
+    sp_count_ACCESS <- if_ycc_ACCESS
+    sp_count_IPSL <- if_ycc_IPSL
+    sp_count_MIROC6 <- if_ycc_MIROC6
+    sp_count_MPI <- if_ycc_MPI
+    sp_count_MRI <- if_ycc_MRI
+    sp_count_mean <- if_ycc_mean
+  } else{
+    sp_risk_2 <- c(sp_taxa,sp_n,sum_1,
+                   sum_ACCESS,sum_IPSL,sum_MIROC6,sum_MPI,sum_MRI,sum_mean,
+                   if_ycc_ACCESS,if_ycc_IPSL,if_ycc_MIROC6,if_ycc_MPI,if_ycc_MRI,if_ycc_mean)
+    sp_risk <- rbind(sp_risk,sp_risk_2)
+    sp_count_ACCESS <- sp_count_ACCESS + if_ycc_ACCESS
+    sp_count_IPSL <- sp_count_IPSL + if_ycc_IPSL
+    sp_count_MIROC6 <- sp_count_MIROC6 + if_ycc_MIROC6
+    sp_count_MPI <- sp_count_MPI + if_ycc_MPI
+    sp_count_MRI <- sp_count_MRI + if_ycc_MRI
+    sp_count_mean <- sp_count_mean + if_ycc_mean
+  }
+}
+
+a<- sum(values(DF_re), na.rm=T)
+print(a)
+
+write.csv(sp_risk,paste0("~/Results/2万種/", sp_taxa, "_list_Re_ssp585.csv"),row.names = FALSE)
+
+output_dir_ER <- "~/Results/2万種/ER"
+output_dir_EMSY <- "~/Results/2万種/EMSY"
+output_dir_DF <- "~/Results/2万種/DF"
+
+year <- 90
+models <- c("mean", "ACCESS", "IPSL", "MIROC6", "MPI", "MRI")
+
+#ERのraster保存
+raster_list_ER <- list(
+  ACCESS  = sp_eines_ACCESS_90,
+  IPSL    = sp_eines_IPSL_90,
+  MIROC6  = sp_eines_MIROC6_90,
+  MPI     = sp_eines_MPI_90,
+  MRI     = sp_eines_MRI_90,
+  mean    = sp_eines_mean_90
+)
+
+for(model in models){
+  
+  filename_ER <- file.path(
+    output_dir_ER,
+    paste0(sp_taxa, "_ER_", model, "_", scenario,"_", ssp585, ".tif")
+  )
+  
+  writeRaster(
+    raster_list_ER[[model]],
+    filename_ER,
+    format = "GTiff",
+    overwrite = TRUE
+  )
+}
+
+#E/MSYのraster保存
+raster_list_EMSY <- list(
+  ACCESS  = EMSY_ACCESS,
+  IPSL    = EMSY_IPSL,
+  MIROC6  = EMSY_MIROC6,
+  MPI     = EMSY_MPI,
+  MRI     = EMSY_MRI,
+  mean    = EMSY_mean
+)
+
+for(model in models){
+  
+  filename_EMSY <- file.path(
+    output_dir_EMSY,
+    paste0(sp_taxa, "_EMSY_", model, "_", scenario,"_", ssp585, ".tif")
+  )
+  
+  writeRaster(
+    raster_list_EMSY[[model]],
+    filename_EMSY,
+    format = "GTiff",
+    overwrite = TRUE
+  )
+}
+
+#DFのraster保存
+#filename_DF <- file.path(output_dir_DF,paste0(sp_taxa, "_DF_mean_ssp585.tif"))
+#writeRaster(DF_re,filename_DF,format = "GTiff",overwrite = TRUE)
+
