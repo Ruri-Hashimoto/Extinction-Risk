@@ -292,7 +292,7 @@ for(model in models){
   
   filename_ER <- file.path(
     output_dir_ER,
-    paste0(sp_taxa, "_ER_", model, "_", scenario,"_", ssp585, ".tif")
+    paste0(sp_taxa, "_ER_", model, "_", year,"_", ssp585, ".tif")
   )
   
   writeRaster(
@@ -317,7 +317,7 @@ for(model in models){
   
   filename_EMSY <- file.path(
     output_dir_EMSY,
-    paste0(sp_taxa, "_EMSY_", model, "_", scenario,"_", ssp585, ".tif")
+    paste0(sp_taxa, "_EMSY_", model, "_", year,"_", ssp585, ".tif")
   )
   
   writeRaster(
