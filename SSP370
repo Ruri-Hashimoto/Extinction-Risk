@@ -294,7 +294,7 @@ for(model in models){
   
   filename_ER <- file.path(
     output_dir_ER,
-    paste0(sp_taxa, "_ER_", model, "_", scenario,"_", ssp370, ".tif")
+    paste0(sp_taxa, "_ER_", model, "_", year,"_", ssp370, ".tif")
   )
   
   writeRaster(
@@ -319,7 +319,7 @@ for(model in models){
   
   filename_EMSY <- file.path(
     output_dir_EMSY,
-    paste0(sp_taxa, "_EMSY_", model, "_", scenario,"_", ssp370, ".tif")
+    paste0(sp_taxa, "_EMSY_", model, "_", year,"_", ssp370, ".tif")
   )
   
   writeRaster(
@@ -331,6 +331,6 @@ for(model in models){
 }
 
 #DFのraster保存
-filename_DF <- file.path(output_dir_DF,paste0(sp_taxa, "_DF_mean_ssp370.tif"))
+filename_DF <- file.path(output_dir_DF,paste0(sp_taxa, "__90_DF_mean_ssp370.tif"))
 writeRaster(DF_re,filename_DF,format = "GTiff",overwrite = TRUE)
 
